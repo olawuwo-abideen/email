@@ -1,0 +1,40 @@
+const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+
+const sendEmailEthereal = async (req, res) => {
+  let testAccount = await nodemailer.createTestAccount();
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.forwardemail.net",
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'yourgmail',
+      pass: 'yourpasswowrd',
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: '"Olawuwo Abideen" <abideenolawuwo@gmail.com>',
+    to: "abideenolawuwo2000@gmail.com, ola@gmail.com",
+    subject: 'Hello World!',
+    html: '<b>Hello World</b>',
+  });
+
+  res.json(info);
+};
+
+const sendEmail = async (req, res) => {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: 'abideenolawuwo@gmail.com', 
+    from: 'abideenolawuwo2000@gmail.com', 
+    subject: 'Hello World',
+    text: 'Hello World',
+    html: '<strong>Hello World</strong>',
+  };
+  const info = await sgMail.send(msg);
+  res.json(info);
+};
+
+module.exports = sendEmail;
